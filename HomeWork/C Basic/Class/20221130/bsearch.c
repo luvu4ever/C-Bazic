@@ -23,6 +23,16 @@ int BinarySearch(int a[], int n, int target){
     return -1;
 }
 
+int BinarySearchBackTrack(int a[], int low, int high, int target){
+    if(low >high) return -1;
+    int mid = low + (high - low) /2;
+    if(a[mid] == target)
+        return mid;
+    if(a[mid] < target)
+        return (a, low, mid-1, target);
+    return (a, mid+1, high, target);
+}
+
 int main(){
     int x, a[MAX_N];
     int n = 100;
@@ -33,6 +43,7 @@ int main(){
     // if(BinarySearch(a, n, x) == -1)
     //     printf("Not found");
     // else
-        printf("%d\n", BinarySearch(a, n, x));
+    //printf("%d\n", BinarySearch(a, n, x));
+    printf("%d\n", BinarySearchBackTrack(a, 1, n, x));
     return 0;
 }
