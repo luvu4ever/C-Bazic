@@ -9,6 +9,7 @@
 #define MAX_NAME_LENGTH (32)
 #define DOUBLE_MAX_NAME_LENGTH (65)
 #define MAX_N (25)
+#define MAX_DATES (100000)
 
 typedef struct Log_t{
     int money;
@@ -138,6 +139,14 @@ void sumBST(Node *root, char *date, char *sell_buy, int *amount, int *money){
     *money += pre_money + root->data.money;
 }
 
+unsigned int hash_date_string(char *date){
+    unsigned int hash = 0;
+    while(*date){
+        hash = hash * 31 + *date ++;
+    }
+    return hash % MAX_DATES;
+}
+
 void Task1(int valid_money, int valid_amount, int max_line){
     printf("Number of valid money line: %d\n", valid_money);
     printf("Number of valid amount line: %d\n", valid_amount);
@@ -146,9 +155,21 @@ void Task1(int valid_money, int valid_amount, int max_line){
 
 Node* Task2(FILE *fin, Log store[]){
     int order;
+    int count[MAX_DATES + 5];
     fscanf(fin, "%d", &order);
     Node *root = buildTree(order, store);
     printf("Height of bst tree: %d\n", height(root));
+    int max = 0;
+    char ans[MAX_DATE_LENGTH];
+    for(int i=0; i< order; i++){
+        int index = hash_date_string(store[i].date);
+        count[index]++;
+        if(count[index] > max){
+            max = count[index];
+            strcpy(ans, store[i].date);
+        }
+    }
+    printf("Day with the most transaction: %s\n", ans);
     return root;
 }
 
@@ -162,11 +183,13 @@ void Task3(FILE *fin, Log store[], Node *root){
     fscanf(fin, "%s", buyer);
     char sell_buy[DOUBLE_MAX_NAME_LENGTH];
     SBconvert(seller, buyer, sell_buy);
+    
     Node *findP = searchLog(root, date, sell_buy);
     if(findP == NULL){
         printf("Not found\n");
         return;
     }
+
     int total_amount = 0, total_money = 0;
     sumBST(findP, date, sell_buy, &total_amount, &total_money);
     printf("Number of product selled: %d\n", total_amount);
