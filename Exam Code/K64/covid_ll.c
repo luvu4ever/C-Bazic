@@ -43,6 +43,8 @@ root_t llInsertAfter(node_t *cur, data_t data){
     return newNode;
 }
 
+root_t root = NULL;
+
 int timeCal(int hour, int minute){
     return hour * 60 + minute;
 }
@@ -57,6 +59,72 @@ void display_menu(){
     printf("6. Thoat\n");
 }
 
+
+void Task2(FILE *fin){
+    node_t *cur = root;
+    char s[50];
+    int hour, min;
+
+    while((fscanf(fin, "%s %d %d", s, &hour, &min)) == 3){
+        data_t temp;
+        strcpy(temp.location, s);
+        temp.hour = timeCal(hour, min);
+        cur = llInsertAfter(cur, temp);
+        if(root == NULL) root = cur;
+    }
+}
+
+void Task3(){
+    node_t *cur = root;
+    printf("%-50s%-10s%-10s\n", "Dia diem", "Gio", "Phut");
+    while(cur != NULL){
+        int hour = cur->data.hour / 60;
+        int min = (cur->data.hour - hour * 60);
+        printf("%-50s%-10d%-10d\n", cur->data.location, hour, min);
+        cur = cur ->next;
+    }
+}
+
+void Task4(){
+    node_t *cur = root;
+    int check = 0;
+    char location[50];
+    fscanf(stdin, "%s", location);
+    while(cur != NULL){
+        if(strcmp(cur->data.location, location)){
+            cur = cur->next;
+            continue;
+        }
+        check = 1;
+        int hour = cur->data.hour / 60;
+        int min = (cur->data.hour - hour * 60);
+        printf("%-10d%-10d\n", hour, min);
+        cur = cur ->next;
+    }
+    if(!check)
+        printf("Ban chua toi dia diem nay\n");
+}
+
+void Task5(){
+    node_t *cur = root;
+    int curhour, curmin;
+    fscanf(stdin, "%d %d", &curhour, &curmin);
+    int time = timeCal(curhour, curmin);
+    if(time < cur->data.hour){
+        printf("Khong tim thay lich su di chuyen\n");
+        return;
+    }
+    while(cur->next != NULL){
+        if(time >= cur ->data.hour && time < cur -> next ->data.hour){
+            printf("%s\n", cur->data.location);
+            return;
+        }
+        cur = cur -> next;
+    }
+    printf("%s\n", cur->next->data.location);
+    return;
+}
+
 char inputFile[] = "log.txt";
 
 int main(){
@@ -66,32 +134,26 @@ int main(){
         return 0;
     }
 
-    root_t root = llInit();
-    node_t *cur = root;
-    char s[50];
-    int hour, min;
-
-    while((fscanf(fin, "%s %d %d", s, hour, min)) == 3){
-        data_t temp;
-        strcpy(temp.location, s);
-        temp.hour = timeCal(hour, min);
-        cur = llInsertAfter(cur, temp);
-    }
     int choice;
     do{
         display_menu();
-        scanf("%d", &choice);
+        fscanf(stdin, "%d", &choice);
         switch(choice){
             case 1:
+                Task2(fin);
                 break;
             case 2:
+                Task3();
                 break;
             case 3:
+                Task4();             
                 break;
             case 4:
+                Task5();
                 break;
-            case 5:
-                break;
+            // case 5:
+            //     Task6();
+            //     break;
             case 6:
                 printf("Exiting...");
                 break;
