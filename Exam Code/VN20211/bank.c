@@ -165,7 +165,7 @@ void Task5(){
     printf("Ho ten: Mai Viet Dung\n");
     printf("MSSV: 20210228\n");
     printf("---------------<3-------------\n");
-    printf("----------------------------\n");
+    printf("------------------------------\n");
 }
 
 char inputFile[] = "data.txt";

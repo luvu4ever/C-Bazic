@@ -269,7 +269,7 @@ int main(){
     int validday = 0;
     double max_size = 0;
     char most_mess[10];
-    ReadInput(fin, all, &validday, &max_size, most_mess);
+        (fin, all, &validday, &max_size, most_mess);
     int choice;
     do{
         display_menu();
