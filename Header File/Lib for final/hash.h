@@ -9,15 +9,29 @@
 #define MAX_CHAR (11)
 #define TABLE_SIZE (13)
 
-typedef struct node_t{
-    char key[MAX_CHAR];
-    char word[50];
-    struct node_t *next;
-} element_t;
+enum { FALSE, TRUE };
 
-element_t *ht[TABLE_SIZE];
+typedef struct node_t {
+  char key[MAX_CHAR];
+  char word[50];
+  struct node_t* next;
+} element_t, Node;
 
-void init_table(element_t ht[]);
+void init_table(element_t* ht[]);
 int hash(const char *key);
 
-element_t *findElement(element_t *ht[], char key[]);
+element_t* findElement(element_t* ht[], char key[]);
+int insertItem(element_t* ht[], element_t o);
+int removeElement(element_t* ht[], char key[]);
+
+int isEmpty(element_t* ht[]);
+
+void clear(element_t* ht[]);
+
+void traverse(element_t* ht[]); 
+
+void _traversebucket(element_t *ht[], int b);
+
+void clearbucket(element_t *ht[], int b);
+void clear(element_t *ht[]);
+#endif __HASH_H__
